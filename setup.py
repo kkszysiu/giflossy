@@ -6,11 +6,21 @@ from distutils.core import setup
 
 def run_bootstrap_and_configure():
     build_dir = 'giflossy_build'
+    scripts_dir = 'scripts'
     here = os.path.abspath(os.getcwd())
+
+    giflossy_bin = '{here}/{scripts_dir}/giflossy'.format(
+        here=here,
+        scripts_dir=scripts_dir
+    )
+    if os.path.isfile(giflossy_bin):
+        return
 
     os.chdir(here)
     print('- creating build dir...')
     os.system('mkdir -p %s' % build_dir)
+    print('- creating scripts dir...')
+    os.system('mkdir -p %s' % scripts_dir)
     print('- bootstraping...')
     os.system('/bin/sh bootstrap.sh')
     print('- configure giflossy...')
@@ -21,7 +31,7 @@ def run_bootstrap_and_configure():
     os.system('make')
     print('- make...')
     os.system('make install')
-    cpy_cmd = 'cp {here}/{build_dir}/bin/gifsicle {here}/{build_dir}/bin/giflossy'.format(
+    cpy_cmd = 'cp {here}/{build_dir}/bin/gifsicle {here}/scripts/giflossy'.format(
         here=here,
         build_dir=build_dir
     )
@@ -40,17 +50,17 @@ if 'install' in sys.argv and 'build' not in sys.argv:
 
 
 setup(
-    name="pygiflossy",
-    version="0.1.0",
+    name='pygiflossy',
+    version='0.1.1',
     description="Gifsicle with superpowers like LZW compression",
-    author="Krzysztof Klinikowski",
-    author_email="kkszysiu@gmail.com",
+    author='Krzysztof Klinikowski',
+    author_email='kkszysiu@gmail.com',
     long_description=
     """Gifsicle with superpowers like LZW compression,
     crafted for Python
     """,
-    scripts=['giflossy_build/bin/giflossy'],
-    license="GPLv2",
+    scripts=['scripts/giflossy'],
+    license='GPLv2',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
