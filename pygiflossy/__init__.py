@@ -27,7 +27,7 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
     shutil.copy(input_filepath, tmp_output_dir)
 
     filename = os.path.basename(input_filepath)
-    tmp_output_filepath = '%s/%s' % (tmp_output_dir, filename)
+    tmp_output_filepath = os.path.join(tmp_output_dir, filename)
 
     arguments.append(tmp_output_filepath)
 
