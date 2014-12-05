@@ -51,7 +51,7 @@ if 'install' in sys.argv and 'build' not in sys.argv:
 
 setup(
     name='pygiflossy',
-    version='0.1.3',
+    version='0.1.4',
     description="Gifsicle with superpowers like LZW compression",
     author='Krzysztof Klinikowski',
     author_email='kkszysiu@gmail.com',
