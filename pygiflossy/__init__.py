@@ -42,7 +42,9 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
         logger.info('Running %s (%s)' % (command, cmd))
         subprocess.check_call(cmd, shell=True)
     except subprocess.CalledProcessError, inst:
-        logger.error('Running %s failed (exit status %s) (%s)' % (command, inst.returncode, cmd))
+        logger.error('Running %s failed (exit status %s) (%s) status: %s' % (
+            command, inst.returncode, cmd, str(inst)
+        ))
     except OSError:
         logger.error('Cannot run %s (%s)' % (command, cmd))
 
