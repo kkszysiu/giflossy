@@ -33,14 +33,15 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
 
     arguments.append(input_filepath)
 
+    cmd = ' '.join([command] + arguments)
+
     try:
-        cmd = ' '.join([command] + arguments)
         logger.info('Running %s (%s)' % (command, cmd))
         subprocess.check_call(cmd, shell=True)
     except subprocess.CalledProcessError, inst:
-        logger.error('Running %s failed (exit status %s)' % (command, inst.returncode))
+        logger.error('Running %s failed (exit status %s) (%s)' % (command, inst.returncode, cmd))
     except OSError:
-        logger.error('Cannot run %s' % command)
+        logger.error('Cannot run %s (%s)' % (command, cmd))
 
     # cleanup
     try:
