@@ -20,11 +20,11 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
     if compression_level:
         arguments.append('--lossy={0}'.format(compression_level))
 
-    arguments.append('-o')
-
     if all(scale):
         arguments.append('--resize-fit')
         arguments.append('x'.join([str(x) for x in scale]))
+
+    arguments.append('-o')
 
     if use_tmp:
         tmp_output_dir = tempfile.mkdtemp(prefix='tmp-pygiflossy-')
