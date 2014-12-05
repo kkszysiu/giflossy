@@ -9,7 +9,7 @@ logging.basicConfig()
 logger = logging.getLogger()
 
 
-def convert(input_filepath, output_filepath, optimize=True, compression_level=30):
+def convert(input_filepath, output_filepath, optimize=True, compression_level=30, use_tmp=False):
     command = os.environ.get('GIFLOSSY_PATH') or 'giflossy'
 
     arguments = ['-w']
@@ -22,14 +22,17 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
 
     arguments.append('-o')
 
-    tmp_output_dir = tempfile.mkdtemp(prefix='tmp-pygiflossy-')
+    if use_tmp:
+        tmp_output_dir = tempfile.mkdtemp(prefix='tmp-pygiflossy-')
 
-    shutil.copy(input_filepath, tmp_output_dir)
+        shutil.copy(input_filepath, tmp_output_dir)
 
-    filename = os.path.basename(input_filepath)
-    tmp_output_filepath = os.path.join(tmp_output_dir, filename)
+        filename = os.path.basename(input_filepath)
+        tmp_output_filepath = os.path.join(tmp_output_dir, filename)
 
-    arguments.append(tmp_output_filepath)
+        arguments.append(tmp_output_filepath)
+    else:
+        arguments.append(output_filepath)
 
     arguments.append(input_filepath)
 
@@ -43,9 +46,10 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
     except OSError:
         logger.error('Cannot run %s (%s)' % (command, cmd))
 
-    # cleanup
-    try:
-        shutil.copyfile(tmp_output_filepath, output_filepath)
-        shutil.rmtree(tmp_output_dir, True)
-    except OSError:
-        pass
+    if use_tmp:
+        # cleanup
+        try:
+            shutil.copyfile(tmp_output_filepath, output_filepath)
+            shutil.rmtree(tmp_output_dir, True)
+        except OSError:
+            pass
