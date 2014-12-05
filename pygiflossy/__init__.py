@@ -9,7 +9,7 @@ logging.basicConfig()
 logger = logging.getLogger()
 
 
-def convert(input_filepath, output_filepath, optimize=True, compression_level=30, use_tmp=False):
+def convert(input_filepath, output_filepath, optimize=True, compression_level=30, use_tmp=False, scale=(0, 0)):
     command = os.environ.get('GIFLOSSY_PATH') or 'giflossy'
 
     arguments = ['-w']
@@ -21,6 +21,10 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
         arguments.append('--lossy={0}'.format(compression_level))
 
     arguments.append('-o')
+
+    if all(scale):
+        arguments.append('--resize-fit')
+        arguments.append('x'.join([str(x) for x in scale])
 
     if use_tmp:
         tmp_output_dir = tempfile.mkdtemp(prefix='tmp-pygiflossy-')
@@ -42,8 +46,8 @@ def convert(input_filepath, output_filepath, optimize=True, compression_level=30
         logger.info('Running %s (%s)' % (command, cmd))
         subprocess.check_call(cmd, shell=True)
     except subprocess.CalledProcessError, inst:
-        logger.error('Running %s failed (exit status %s) (%s) status: %s' % (
-            command, inst.returncode, cmd, str(inst)
+        logger.error('Running %s failed (exit status %s) (%s)' % (
+            command, inst.returncode, cmd
         ))
     except OSError:
         logger.error('Cannot run %s (%s)' % (command, cmd))
