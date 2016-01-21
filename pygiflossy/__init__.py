@@ -6,7 +6,7 @@ import logging
 
 logging.basicConfig()
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 def convert(input_filepath, output_filepath, optimize=True, compression_level=30, use_tmp=False, scale=(0, 0)):
